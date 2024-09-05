@@ -1,0 +1,34 @@
+# github:
+#   prebuilds:
+#     master: true
+#     branches: true
+#     pullRequests: false
+#     pullRequestsFromForks: false
+#     addCheck: false
+#     addComment: false
+#     addBadge: false
+ 
+image:
+  file: .gitpod.dockerfile
+ 
+tasks:
+  - name: mongodb
+    command: mkdir -p /workspace/data && mongod --dbpath /workspace/data
+ 
+  - name: python
+    command: pip install -r requirements.txt
+ 
+  - name: mongoImport
+    command: ./mongoimport --db axxes --collection indomoBusinesses --file data.json
+ 
+  - name: path
+    command: export PYTHONPATH="${PYTHONPATH}:/workspace/mongodb/"
+  
+  - name: tests
+    command: /home/gitpod/.pyenv/shims/python -m pip install -U pytest
+ 
+vscode:
+  extensions:
+    - almenon.arepl
+    - littlefoxteam.vscode-python-test-adapter
+    - mongodb.mongodb-vscode
